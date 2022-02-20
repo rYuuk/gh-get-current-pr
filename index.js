@@ -4,8 +4,8 @@
  * Created on 22.03.20
  ***************************/
 
-const { getInput, setOutput, setFailed } = require('@actions/core');
-const { GitHub, context } = require('@actions/github');
+const {getInput, setOutput, setFailed} = require('@actions/core');
+const {GitHub, context} = require('@actions/github');
 
 const getInputBool = (name, defaultValue = false) => {
     const param = getInput(name);
@@ -17,7 +17,7 @@ const getInputBool = (name, defaultValue = false) => {
 };
 
 async function main() {
-    const token = getInput('github-token', { required: true });
+    const token = getInput('github-token', {required: true});
     const sha = getInput('sha') || context.sha;
     const filterOutClosed = getInputBool('filterOutClosed');
 
@@ -40,7 +40,15 @@ async function main() {
     setOutput('pr_created_at', pr ? pr.created_at : '');
     setOutput('pr_merged_at', pr ? pr.merged_at : '');
     setOutput('pr_closed_at', pr ? pr.closed_at : '');
-    setOutput('pr_labels', pr ? pr.labels : '');
+
+    let labels = "";
+
+    for (const label of pr.labels) {
+        labels += " " + label.name.toString();
+    }
+
+
+    setOutput('pr_labels', pr ? labels : '');
 }
 
 main().catch(err => setFailed(err.message));
