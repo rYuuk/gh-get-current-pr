@@ -43,8 +43,8 @@ async function main() {
 
     let labels = "";
 
-    for (const label of pr.labels) {
-        labels += " " + label.name.toString();
+    for (let i = 0; i < pr.labels.length; i++) {
+        labels += " " + pr.labels[i].name.toString();
     }
 
 
